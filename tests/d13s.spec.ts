@@ -14,11 +14,12 @@ test("home page presents D13S as a curated digital product business", async ({ p
 test("catalog exposes production-shaped mock products", async ({ page }) => {
   await page.goto("/products");
 
-  await expect(page.getByRole("heading", { name: "Catalog sản phẩm số D13S" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Source, plugin, template/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Catalog gọn hơn/ })).toBeVisible();
   await expect(page.getByText("Mock", { exact: true }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /Source/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Template/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Plugin/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Source", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Template", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Plugin", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: /Xem chi tiết/ }).first()).toBeVisible();
 });
 

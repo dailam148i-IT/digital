@@ -38,3 +38,14 @@ Use this file to manage local coding sessions and handoffs. Keep entries short, 
 - Result: production-shaped mock MVP validated; release gate passed; visual QA passed with screenshots.
 - Blockers: production payment/auth/download still require credentials, policy approval, RLS, private storage, and deploy smoke.
 - Next step: commit and push `feat/production-mvp`; keep real checkout disabled until high-risk blockers are closed.
+
+## 2026-05-18 - products-tailwind-redesign
+
+- Goal: Redesign `/products` after visual review and move the catalog surface from custom CSS classes to Tailwind utilities.
+- Branch: feat/production-mvp
+- Owner: Codex
+- Files touched: `src/app/products/page.tsx`, `src/components/product-card.tsx`, `src/components/site-header.tsx`, `src/app/globals.css`, `tests/d13s.spec.ts`, `docs/DESIGN_SYSTEM.md`
+- Commands run: `npm run verify:quick`; `npm run e2e:dev`; `npm run build`; Playwright responsive visual QA for `/products`
+- Result: Tailwind catalog redesign passed E2E, build, and visual QA at 320/375/768/1440.
+- Blockers: broader routes still contain legacy CSS class usage and should be migrated incrementally.
+- Next step: continue Tailwind migration route-by-route, starting with product detail and checkout.
