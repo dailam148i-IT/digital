@@ -1,6 +1,6 @@
 # Website Spec
 
-Status: draft
+Status: reviewed
 
 Allowed values: draft | reviewed | approved
 
@@ -9,6 +9,8 @@ Do not implement production work from this spec until status is `approved` or th
 ## Objective
 
 Build the first useful version of the D13S website from `docs/PRODUCT_BRIEF.md`.
+
+Current implementation note: US-002 implements a production-shaped MVP shell using clearly labeled mock data and mock payment/download flows. Real checkout and real file delivery remain blocked until high-risk production gates pass.
 
 ## Current Technical Baseline
 
@@ -22,18 +24,29 @@ Build the first useful version of the D13S website from `docs/PRODUCT_BRIEF.md`.
 ## Initial Site Structure
 
 - `/`: home page with hero, services, process, and contact sections.
+- `/products`: curated digital product catalog using production-shaped mock data.
+- `/products/[slug]`: product detail with license, support, update, requirements, deliverables, and mock checkout CTA.
+- `/checkout/[slug]`: mock checkout only; no real payment collection.
+- `/account/library`, `/account/orders`, `/account/tickets`: mock account surfaces for owned products, orders, and support.
+- `/services`, `/blog`, `/blog/[slug]`, `/contact`, `/terms`, `/refund-policy`, `/privacy`, `/en`: public supporting routes.
 
 ## Route Contracts
 
 | Route | Purpose | Sections | Primary CTA | Metadata Status |
 | --- | --- | --- | --- | --- |
 | `/` | D13S public homepage | Hero, categories, trust, featured offers, contact/support | TBD | draft |
-| `/products` | Digital product catalog | Filters/categories, product cards, policy notes | Browse/buy product | planned |
-| `/services` | Website and digital service packages | packages, process, proof, consultation CTA | Request consultation | planned |
-| `/courses` | Courses/resources | course cards, outcomes, proof | View courses | planned |
-| `/contact` | Support and sales contact | contact methods, response expectations | Contact D13S | planned |
-| `/terms` | Terms for digital sales | legal and usage terms | n/a | planned |
-| `/refund-policy` | Refund/replacement policy | digital delivery and activation-code policy | n/a | planned |
+| `/products` | Digital product catalog | Categories, product cards, policy notes | Browse product detail | mock implemented |
+| `/products/[slug]` | Product detail | Demo, price, license, support, update, requirements, deliverables | Mock checkout | mock implemented |
+| `/checkout/[slug]` | Mock checkout | Order summary, provider warning, mock completion | Mock payment completion | mock implemented |
+| `/account/library` | Mock customer library | Entitlements, versions, signed URL request | Mock download request | mock implemented |
+| `/account/orders` | Mock order history | Order state, product, total | Review order | mock implemented |
+| `/account/tickets` | Mock support | Ticket form and ticket list | Create mock ticket | mock implemented |
+| `/services` | Website and digital service packages | packages, process, scope notes, consultation CTA | Request consultation | mock implemented |
+| `/blog` | Resources and buying guides | article cards, categories, internal CTA | Read guide | mock implemented |
+| `/contact` | Support and sales contact | contact methods, request form placeholder | Contact D13S | placeholder |
+| `/terms` | Terms for digital sales | legal and usage terms | n/a | placeholder |
+| `/refund-policy` | Refund/replacement policy | digital delivery and replacement policy | n/a | placeholder |
+| `/privacy` | Privacy policy | customer/order/support data notes | n/a | placeholder |
 
 ## CTA Contracts
 
@@ -43,6 +56,8 @@ Build the first useful version of the D13S website from `docs/PRODUCT_BRIEF.md`.
 | Build a website with D13S | TBD | Opens service inquiry path | planned |
 | Contact support | TBD | Opens official support channel | planned |
 | Contact | `mailto:hello@example.com` | Placeholder only until official channel is chosen | placeholder |
+| Mock checkout | `/checkout/[slug]` | Opens mock checkout, never collects real money | mock implemented |
+| Account library | `/account/library` | Shows mock entitlements and fake signed URL request | mock implemented |
 
 ## SEO Contract
 
@@ -91,6 +106,13 @@ Build the first useful version of the D13S website from `docs/PRODUCT_BRIEF.md`.
 - Production analytics.
 - Backend contact form.
 - Direct ecommerce checkout until payment/delivery/refund policy is approved.
+
+## Mock MVP Controls
+
+- Mock checkout must remain visibly labeled and must not collect real money.
+- Mock download must not expose real files.
+- Client code must not decide `paid`, `fulfilled`, `licenseIssued`, or `downloadAvailable`.
+- Production payOS/VietQR stays disabled until credentials, webhook signature verification, idempotency, RLS, private storage, policy approval, and release validation exist.
 
 ## Quality Bar
 
