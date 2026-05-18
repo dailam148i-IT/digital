@@ -1,6 +1,6 @@
 # Deployment Runbook
 
-This runbook assumes Vercel by default. If another host is chosen, record the decision in `docs/decisions/`.
+This runbook now supports the D13S MVP target of Docker on a VPS. Vercel notes remain as an alternate preview path only.
 
 ## Deployment Gate
 
@@ -29,11 +29,34 @@ Recommended source of truth:
 - Keep standard Vercel settings in project settings unless a repo-level `vercel.json` is needed.
 - If `vercel.json` is added later, record why in `docs/decisions/`.
 
+## Docker VPS Setup
+
+Current repo baseline:
+
+- `Dockerfile` builds a Next.js standalone image.
+- `docker-compose.yml` runs the app on port `3000` and checks `/api/health`.
+- `.dockerignore` excludes dependencies, build output, env files, reports, and Git metadata.
+
+Minimum VPS production requirements:
+
+- reverse proxy with HTTPS, such as Caddy or Nginx
+- `.env` stored on the server, not in Git
+- image tag or commit SHA recorded for rollback
+- healthcheck monitored after deploy
+- database and storage backup plan documented before real checkout
+- checkout can be disabled by leaving payOS credentials absent
+
 ## Environment Variables
 
 | Variable | Required | Environment | Notes |
 | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | yes | preview, production | Public site URL |
+| `NEXT_PUBLIC_SUPABASE_URL` | before real auth/download | production | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | before real auth/download | production | Browser-safe Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | before real fulfillment/download | production | Server-only; never expose to client |
+| `PAYOS_CLIENT_ID` | before real checkout | production | payOS merchant client id |
+| `PAYOS_API_KEY` | before real checkout | production | Server-only payOS API key |
+| `PAYOS_CHECKSUM_KEY` | before real checkout | production | Server-only webhook checksum/signature key |
 
 Do not commit `.env`.
 
@@ -64,10 +87,11 @@ After preview deploy:
 After production deploy:
 
 - homepage returns 200
+- `/api/health` returns 200
 - title and meta description are correct
-- CTA works
+- catalog, product detail, mock checkout, account library, support, and policy routes work
 - mobile layout works
-- no visible placeholder content
+- placeholder/mock content is clearly labeled or replaced with approved real content
 - no console errors
 - no broken critical assets
 - analytics/monitoring work if configured

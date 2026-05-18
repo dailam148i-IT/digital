@@ -1,126 +1,122 @@
-import { ArrowRight, CheckCircle2, Layers3, MonitorSmartphone } from "lucide-react";
-
-const proofPoints = [
-  "Discovery, copy, UI, and testing stay in one tracked workflow.",
-  "Every page ships with responsive layout and accessibility checks.",
-  "Agent decisions are written down before implementation expands.",
-];
-
-const services = [
-  {
-    title: "Brand site",
-    description: "A sharp public website with clear positioning, pages, and conversion paths.",
-  },
-  {
-    title: "Product UI",
-    description: "Interactive flows, dashboards, and forms designed for repeated real use.",
-  },
-  {
-    title: "Launch system",
-    description: "Testing, deployment readiness, and agent memory for future iteration.",
-  },
-];
+import { ArrowRight, CheckCircle2, Code2, Layers3, ShieldCheck } from "lucide-react";
+import Link from "next/link";
+import { CommercePanel } from "@/components/commerce-panel";
+import { ProductCard } from "@/components/product-card";
+import { SectionHeading } from "@/components/section-heading";
+import { PageShell } from "@/components/site-header";
+import { getCatalogStats, getFeaturedProducts } from "@/modules/catalog/queries";
 
 export default function Home() {
+  const featuredProducts = getFeaturedProducts();
+  const stats = getCatalogStats();
+
   return (
-    <main>
-      <header className="site-header" aria-label="Primary">
-        <a className="brand" href="#top" aria-label="Digital home">
-          <span className="brand-mark" aria-hidden="true" />
-          <span>Digital</span>
-        </a>
-        <nav className="nav-links" aria-label="Main navigation">
-          <a href="#services">Services</a>
-          <a href="#process">Process</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </header>
-
-      <section id="top" className="hero-section">
-        <div className="hero-copy">
-          <p className="eyebrow">Agent-first web studio</p>
-          <h1>Build a website that can keep improving after launch.</h1>
-          <p className="hero-text">
-            A focused starter for turning product intent into a fast, tested, responsive website.
-          </p>
-          <div className="hero-actions">
-            <a className="primary-action" href="#contact">
-              Start project
-              <ArrowRight size={18} aria-hidden="true" />
-            </a>
-            <a className="secondary-action" href="#process">
-              View process
-            </a>
+    <PageShell>
+      <main>
+        <section className="hero-section">
+          <div className="hero-copy">
+            <p className="eyebrow">D13S digital commerce</p>
+            <h1>Source, plugin, template và dịch vụ web được kiểm soát như sản phẩm thật.</h1>
+            <p className="hero-text">
+              D13S bán sản phẩm số tự sở hữu, có demo, license, support, update policy và quy trình
+              kiểm duyệt trước khi đưa vào catalog.
+            </p>
+            <div className="hero-actions">
+              <Link className="primary-action" href="/products">
+                Xem catalog
+                <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+              <Link className="secondary-action" href="/services">
+                Thuê D13S làm web
+              </Link>
+            </div>
+            <dl className="hero-stats" aria-label="Catalog statistics">
+              <div>
+                <dt>{stats.productCount}</dt>
+                <dd>mock products</dd>
+              </div>
+              <div>
+                <dt>{stats.categoryCount}</dt>
+                <dd>nhóm sản phẩm</dd>
+              </div>
+              <div>
+                <dt>{stats.updateMonths}</dt>
+                <dd>tháng update</dd>
+              </div>
+            </dl>
           </div>
-        </div>
-
-        <div className="hero-visual" aria-label="Website launch dashboard preview">
-          <div className="preview-bar">
-            <span />
-            <span />
-            <span />
+          <div className="hero-visual" aria-label="D13S product control dashboard">
+            <div className="preview-bar">
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className="preview-dashboard">
+              <div className="dashboard-row dashboard-row-strong">
+                <ShieldCheck size={24} aria-hidden="true" />
+                <div>
+                  <strong>Curated catalog</strong>
+                  <span>Demo, docs, license, support</span>
+                </div>
+              </div>
+              <div className="dashboard-row">
+                <Code2 size={22} aria-hidden="true" />
+                <span>Source web/app</span>
+                <strong>Ready</strong>
+              </div>
+              <div className="dashboard-row">
+                <Layers3 size={22} aria-hidden="true" />
+                <span>Plugin và template</span>
+                <strong>Mock</strong>
+              </div>
+              <div className="dashboard-checks">
+                {["No emoji icons", "Signed downloads", "Ticket support"].map((item) => (
+                  <span key={item}>
+                    <CheckCircle2 size={16} aria-hidden="true" />
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="preview-grid">
-            <div className="preview-panel preview-panel-wide">
-              <MonitorSmartphone size={24} aria-hidden="true" />
-              <strong>Responsive launch</strong>
-            </div>
-            <div className="preview-panel">
-              <span className="metric">98</span>
-              <span>Quality</span>
-            </div>
-            <div className="preview-panel">
-              <Layers3 size={24} aria-hidden="true" />
-              <span>Reusable sections</span>
-            </div>
-            <div className="preview-panel preview-panel-accent">
-              <CheckCircle2 size={24} aria-hidden="true" />
-              <span>Verified</span>
+        </section>
+
+        <section className="content-section">
+          <SectionHeading
+            eyebrow="Featured"
+            title="Sản phẩm số đầu tiên được dựng theo shape production."
+            description="Dữ liệu hiện là mock có kiểm soát, nhưng schema, pricing, license và support fields đã giống luồng thật."
+          />
+          <div className="product-grid">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
+          </div>
+        </section>
+
+        <section className="content-section split-section">
+          <div>
+            <SectionHeading
+              eyebrow="Build, buy, learn"
+              title="Một hệ thống bán hàng, không phải landing page rỗng."
+              description="Catalog tạo doanh thu, dịch vụ web xử lý khách cần customize, blog kéo SEO bằng nội dung có intent mua."
+            />
+            <div className="feature-list">
+              {[
+                "Checkout tự động qua payOS/VietQR khi có credentials thật.",
+                "Account library quản lý order, entitlement, version và download.",
+                "Ticket support trong account để kiểm soát SLA và lịch sử hỗ trợ.",
+              ].map((item) => (
+                <p key={item}>
+                  <CheckCircle2 size={18} aria-hidden="true" />
+                  {item}
+                </p>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <section id="services" className="content-section">
-        <div className="section-heading">
-          <p className="eyebrow">Services</p>
-          <h2>Built for the first useful version.</h2>
-        </div>
-        <div className="service-grid">
-          {services.map((service) => (
-            <article className="service-card" key={service.title}>
-              <h3>{service.title}</h3>
-              <p>{service.description}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="process" className="process-section">
-        <div className="section-heading">
-          <p className="eyebrow">Process</p>
-          <h2>Short loops, clear evidence.</h2>
-        </div>
-        <ul className="proof-list">
-          {proofPoints.map((point) => (
-            <li key={point}>
-              <CheckCircle2 size={20} aria-hidden="true" />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section id="contact" className="contact-section">
-        <div>
-          <p className="eyebrow">Next step</p>
-          <h2>Start with the product brief.</h2>
-        </div>
-        <a className="primary-action" href="mailto:hello@example.com">
-          Contact
-          <ArrowRight size={18} aria-hidden="true" />
-        </a>
-      </section>
-    </main>
+          <CommercePanel />
+        </section>
+      </main>
+    </PageShell>
   );
 }

@@ -1,4 +1,5 @@
 import { spawn } from "node:child_process";
+import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import { setTimeout as delay } from "node:timers/promises";
 
@@ -27,6 +28,22 @@ function spawnProcess(command, args, options = {}) {
     windowsHide: true,
     ...options,
   });
+}
+
+function prepareStandaloneAssets() {
+  if (!existsSync(".next/standalone/server.js")) {
+    return;
+  }
+
+  const standaloneStaticDir = ".next/standalone/.next/static";
+  rmSync(standaloneStaticDir, { force: true, recursive: true });
+  mkdirSync(".next/standalone/.next", { recursive: true });
+  cpSync(".next/static", standaloneStaticDir, { recursive: true });
+
+  if (existsSync("public")) {
+    rmSync(".next/standalone/public", { force: true, recursive: true });
+    cpSync("public", ".next/standalone/public", { recursive: true });
+  }
 }
 
 async function waitForServer(targetUrl, timeoutMs = 120_000) {
@@ -92,14 +109,24 @@ async function stopProcessTree(child) {
 async function run() {
   const port = await getFreePort();
   const url = `http://localhost:${port}`;
-  const server = spawnProcess(process.execPath, [
-    "node_modules/next/dist/bin/next",
-    "start",
-    "-p",
-    String(port),
-    "-H",
-    "localhost",
-  ]);
+  const standaloneServer = ".next/standalone/server.js";
+  prepareStandaloneAssets();
+  const server = existsSync(standaloneServer)
+    ? spawnProcess(process.execPath, [standaloneServer], {
+        env: {
+          ...process.env,
+          HOSTNAME: "localhost",
+          PORT: String(port),
+        },
+      })
+    : spawnProcess(process.execPath, [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        String(port),
+        "-H",
+        "localhost",
+      ]);
 
   try {
     await waitForServer(url);

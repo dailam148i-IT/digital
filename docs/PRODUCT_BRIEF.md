@@ -2,7 +2,7 @@
 
 Use this file as the first input for the coding agent.
 
-Status: draft
+Status: reviewed
 
 Allowed values: draft | reviewed | approved
 
@@ -84,6 +84,7 @@ Do not implement production work from this brief until status is `approved` or t
 - Primary calls to action are visible without confusion.
 - Build, lint, typecheck, and E2E tests pass.
 - Durable decisions are saved to agentmemory.
+- Mock product, checkout, and policy content are clearly labeled until replaced with real approved content.
 
 ## Approval Checklist
 
@@ -97,7 +98,8 @@ Do not implement production work from this brief until status is `approved` or t
 
 ## Current Blockers
 
-- Choose D13S primary business model: marketplace, web-service studio, course hub, or hybrid hub.
-- Choose primary CTA and purchase/contact path.
+- Replace mock product data with real D13S-owned products, files, screenshots, demos, prices, and changelogs.
+- Replace placeholder contact channel with official support/sales destination.
+- Approve terms, refund/replacement, privacy, delivery, support, and license policy before real checkout.
 - Clarify activation-code sourcing, legality, warranty, refund, and support.
-- Provide product list, prices, images, proof/reviews/portfolio, and policies.
+- Configure and validate Supabase Auth/RLS, private storage, payOS/VietQR, backup, monitoring, and VPS deploy smoke before production checkout.
